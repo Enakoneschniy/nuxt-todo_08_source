@@ -10,6 +10,8 @@
 </template>
 
 <script>
+  import { mapActions } from 'vuex';
+
   export default {
     name: "AddTodo",
     data() {
@@ -18,8 +20,11 @@
       }
     },
     methods: {
+      ...mapActions({
+        addTodo: 'Todo/addTodo'
+      }),
       onSubmit() {
-        this.$emit('add', this.title);
+        this.addTodo(this.title);
         this.title = '';
       }
     }

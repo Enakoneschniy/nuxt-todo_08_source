@@ -3,13 +3,14 @@
     <form>
       <div class="form-group form-check">
         <input type="checkbox" :checked="item.done" class="form-check-input" id="done">
-        <label class="form-check-label" for="done">{{ item.title }}</label>
+        <label v-if="!isEdit" class="form-check-label" for="done">{{ item.title }}</label>
+        <input v-else type="text" class="form-control" @keyup.enter="onSave" @keyup.esc="onCancel" v-model="newTitle">
       </div>
       <div class="controls">
-        <button class="btn btn-sm btn-primary">Edit</button>
-        <button class="btn btn-sm btn-danger">Delete</button>
+        <button v-if="!isEdit" class="btn btn-sm btn-primary" @click.prevent="switchToEdit">Edit</button>
+        <button v-else class="btn btn-sm btn-success" @click.prevent="onSave">Save</button>
+        <button class="btn btn-sm btn-danger" @click.prevent="onDelete">Delete</button>
       </div>
-
     </form>
   </li>
 </template>
@@ -21,6 +22,32 @@
       item: {
         type: Object,
         required: true
+      }
+    },
+    data() {
+      return {
+        newTitle: '',
+        isEdit: false
+      }
+    },
+    methods: {
+      switchToEdit() {
+        this.newTitle = this.item.title;
+        this.isEdit = true;
+      },
+      onCancel() {
+        this.isEdit = false;
+        this.newTitle = '';
+      },
+      onSave() {
+        this.isEdit = false;
+        this.$emit('edit', { title: this.newTitle, id: this.item.id });
+        this.newTitle = '';
+      },
+      onDelete() {
+        if(confirm('Are you sure?')) {
+          this.$emit('delete', this.item.id);
+        }
       }
     }
   }
