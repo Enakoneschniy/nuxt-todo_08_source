@@ -3,7 +3,7 @@ import state from './state'
 import actions from './actions'
 import getters from './getters'
 import mutations from './mutations'
-//import plugins from './plugins'
+import plugins from './plugins'
 import modules from './modules'
 
 export default () => {
@@ -13,6 +13,6 @@ export default () => {
     actions,
     getters,
     modules,
-    //plugins,
+    plugins,
   })
 };

@@ -2,8 +2,8 @@
   <li class="list-group-item">
     <form>
       <div class="form-group form-check">
-        <input type="checkbox" :checked="item.done" class="form-check-input" id="done">
-        <label v-if="!isEdit" class="form-check-label" for="done">{{ item.title }}</label>
+        <input type="checkbox" :checked="item.done" @change="toggleDone(item.id)" class="form-check-input" id="done">
+        <label v-if="!isEdit" class="form-check-label" :class="{ done: item.done }" for="done">{{ item.title }}</label>
         <input v-else type="text" class="form-control" @keyup.enter="onSave" @keyup.esc="onCancel" v-model="newTitle">
       </div>
       <div class="controls">
@@ -16,6 +16,8 @@
 </template>
 
 <script>
+  import { mapActions } from 'vuex'
+
   export default {
     name: "TodoItem",
     props: {
@@ -31,6 +33,11 @@
       }
     },
     methods: {
+      ...mapActions({
+        deleteTodo: 'Todo/deleteTodo',
+        editTodo: 'Todo/editTodo',
+        toggleDone: 'Todo/toggleDone'
+      }),
       switchToEdit() {
         this.newTitle = this.item.title;
         this.isEdit = true;
@@ -41,12 +48,12 @@
       },
       onSave() {
         this.isEdit = false;
-        this.$emit('edit', { title: this.newTitle, id: this.item.id });
+        this.editTodo({ title: this.newTitle, id: this.item.id });
         this.newTitle = '';
       },
       onDelete() {
         if(confirm('Are you sure?')) {
-          this.$emit('delete', this.item.id);
+          this.deleteTodo(this.item.id);
         }
       }
     }
@@ -73,5 +80,8 @@
   .form-check-label {
     margin-bottom: 0;
     margin-left: 20px;
+  }
+  .form-check-label.done {
+    text-decoration: line-through;
   }
 </style>

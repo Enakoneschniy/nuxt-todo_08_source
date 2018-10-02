@@ -1,4 +1,4 @@
-import { ADD_TODO, DELETE_TODO, EDIT_TODO } from "./mutation-types";
+import { ADD_TODO, DELETE_TODO, EDIT_TODO, TOGGLE_DONE } from "./mutation-types";
 function* genId() {
   let id = 1;
   while (true) {
@@ -15,10 +15,13 @@ export default {
       done: false
     });
   },
-  deleteTodo() {
-
+  deleteTodo({ commit }, id) {
+    commit(DELETE_TODO, id);
   },
-  editTodo() {
-
+  editTodo({ commit }, todo) {
+    commit(EDIT_TODO, todo);
+  },
+  toggleDone({ commit }, id) {
+    commit(TOGGLE_DONE, id);
   }
 }
