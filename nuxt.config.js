@@ -1,5 +1,5 @@
-const pkg = require('./package')
-
+const pkg = require('./package');
+const https = require('https');
 module.exports = {
   mode: 'universal',
 
@@ -50,7 +50,19 @@ module.exports = {
   ** Axios module configuration
   */
   axios: {
-    // See https://github.com/nuxt-community/axios-module#options
+    baseURL: 'http://localhost:3000',
+    browserBaseURL: 'http://localhost:3000',
+    proxy: true,
+    https: true,
+    progress: false,
+    retry: { retries: 1 }
+  },
+  proxy: {
+    '/posts': {
+      target: 'https://jsonplaceholder.typicode.com' ,
+      //secure: true,
+      //agent: new https.Agent({ rejectUnauthorized: false })
+    }
   },
   auth: {
     redirect: {
